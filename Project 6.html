@@ -94,7 +94,7 @@ In this problem, I will plot the histogram and density of loan_amnt using ggplot
   <span class="hl kwd">geom_vline</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">xintercept</span><span class="hl std">=</span><span class="hl kwd">mean</span><span class="hl std">(loan_amnt)),</span>
              <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;red&quot;</span><span class="hl std">,</span> <span class="hl kwc">linetype</span><span class="hl std">=</span><span class="hl str">&quot;solid&quot;</span><span class="hl std">,</span> <span class="hl kwc">size</span><span class="hl std">=</span><span class="hl num">1</span><span class="hl std">)</span>
 </pre></div>
-</div><div class="rimage default"><img src="figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div></div>
+</div><div class="rimage default"><img src="project_6_figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div></div>
 
 <p>Problem 3<br>
 In this problem, I will plot the scatter plot of loan_amnt against annual_inc using ggplot2</p>
@@ -115,7 +115,7 @@ In this problem, I will plot the scatter plot of loan_amnt against annual_inc us
 </pre></div>
 <div class="warning"><pre class="knitr r">## Warning: Removed 51 rows containing missing values (geom_smooth).
 </pre></div>
-</div><div class="rimage default"><img src="figure/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" class="plot" /></div></div>
+</div><div class="rimage default"><img src="project_6_figure/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" class="plot" /></div></div>
 <br>
 
 <p>Problem 4<br>
@@ -126,7 +126,7 @@ Next, I will generate the barplot of term and grade on the same barplot using gg
   <span class="hl com"># I want to add labels to the plot </span>
   <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Bar Plot of Term and Grade&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span> <span class="hl std">=</span><span class="hl str">&quot;Term&quot;</span><span class="hl std">,</span> <span class="hl kwc">y</span> <span class="hl std">=</span><span class="hl str">&quot;Count&quot;</span> <span class="hl std">)</span>
 </pre></div>
-</div><div class="rimage default"><img src="figure/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div></div>
+</div><div class="rimage default"><img src="project_6_figure/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div></div>
 <br>
 
 <p>Problem 5<br>
@@ -146,7 +146,7 @@ In this problem,  I will now generate the dotplot of loan_amnt against grade usi
   <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Dot Plot of Grade and Loan Amount&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span> <span class="hl std">=</span><span class="hl str">&quot;Grade&quot;</span><span class="hl std">,</span> <span class="hl kwc">y</span> <span class="hl std">=</span><span class="hl str">&quot;Loan Amount&quot;</span>
        <span class="hl std">)</span>
 </pre></div>
-</div><div class="rimage default"><img src="figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div></div>
+</div><div class="rimage default"><img src="project_6_figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div></div>
 <br>
 
 <p>Problem 6<br>
@@ -157,10 +157,10 @@ Lastly, I will create the boxplot of loan_amnt against term using ggplot2 </p>
         <span class="hl kwc">xlab</span> <span class="hl std">=</span> <span class="hl str">&quot;Term&quot;</span><span class="hl std">,</span>
         <span class="hl kwc">ylab</span> <span class="hl std">=</span> <span class="hl str">&quot;Loan Amounts&quot;</span><span class="hl std">)</span>
 </pre></div>
-</div><div class="rimage default"><img src="figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div><div class="rcode">
+</div><div class="rimage default"><img src="project_6_figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div><div class="rcode">
 <div class="source"><pre class="knitr r"><span class="hl kwd">last_plot</span><span class="hl std">()</span>
 </pre></div>
-</div><div class="rimage default"><img src="figure/unnamed-chunk-7-2.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div><div class="rcode">
+</div><div class="rimage default"><img src="project_6_figure/unnamed-chunk-7-2.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div><div class="rcode">
 <div class="source"><pre class="knitr r"><span class="hl com"># Now I will save the graph in a file, loanterm.jpg using ggplot2</span>
 <span class="hl kwd">ggsave</span><span class="hl std">(</span><span class="hl str">&quot;loanterm.jpg&quot;</span><span class="hl std">)</span>
 </pre></div>
