@@ -1,0 +1,173 @@
+<html>
+
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>Data Visualization Using ggplot2</title>
+</head>
+
+<body>
+<h2>Data Visualization Using GGPLOT2</h2><br>
+<p>Problem 1</p
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#set working directory</span>
+<span class="hl kwd">setwd</span><span class="hl std">(</span><span class="hl str">&quot;~/Desktop/MU/DS/DSCI_302/Projects/Project 6&quot;</span><span class="hl std">)</span>
+
+<span class="hl com">#load data</span>
+<span class="hl kwd">library</span><span class="hl std">(readxl)</span>
+<span class="hl std">loan</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read.csv</span><span class="hl std">(</span><span class="hl str">&quot;loan.csv&quot;</span><span class="hl std">)</span>
+
+<span class="hl com"># load ggplot2 into memory</span>
+<span class="hl kwd">library</span><span class="hl std">(ggplot2)</span>
+</pre></div>
+</div></div>
+
+<p>Problem 2<br>
+In this problem, I will plot the histogram and density of loan_amnt using ggplot2</p>
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span> <span class="hl std">= loan,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=loan_amnt))</span><span class="hl opt">+</span>
+  <span class="hl com"># this code will add the histogram layer</span>
+  <span class="hl kwd">geom_histogram</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">y</span><span class="hl std">=..density..),</span> <span class="hl kwc">bins</span><span class="hl std">=</span><span class="hl num">45</span><span class="hl std">,</span> <span class="hl kwc">colour</span><span class="hl std">=</span><span class="hl str">&quot;black&quot;</span><span class="hl std">,</span> <span class="hl kwc">fill</span><span class="hl std">=</span><span class="hl str">&quot;pink&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl com"># here the density graph is added</span>
+  <span class="hl kwd">geom_density</span><span class="hl std">(</span><span class="hl kwc">alpha</span><span class="hl std">=</span><span class="hl num">.2</span><span class="hl std">,</span> <span class="hl kwc">fill</span><span class="hl std">=</span><span class="hl str">&quot;blue&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl com"># I want to add labels to the plot </span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Histogram and Density Plot of Loan Amounts&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span> <span class="hl std">=</span><span class="hl str">&quot;Loan Amounts&quot;</span><span class="hl std">,</span> <span class="hl kwc">y</span> <span class="hl std">=</span><span class="hl str">&quot;Density&quot;</span> <span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl com"># I will now add a vertical line denoting the mean </span>
+  <span class="hl kwd">geom_vline</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">xintercept</span><span class="hl std">=</span><span class="hl kwd">mean</span><span class="hl std">(loan_amnt)),</span>
+             <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;red&quot;</span><span class="hl std">,</span> <span class="hl kwc">linetype</span><span class="hl std">=</span><span class="hl str">&quot;solid&quot;</span><span class="hl std">,</span> <span class="hl kwc">size</span><span class="hl std">=</span><span class="hl num">1</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div></div>
+
+<p>Problem 3<br>
+In this problem, I will plot the scatter plot of loan_amnt against annual_inc using ggplot2</p>
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span> <span class="hl std">= loan,</span> <span class="hl kwc">mapping</span> <span class="hl std">=</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= annual_inc,</span> <span class="hl kwc">y</span> <span class="hl std">= loan_amnt))</span><span class="hl opt">+</span>
+  <span class="hl com"># this adds the scatter plot layer</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span><span class="hl opt">+</span>
+  <span class="hl com"># I want to add labels to the plot </span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Scatter Plot of Loan Amount v Annual Income&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span> <span class="hl std">=</span><span class="hl str">&quot;Annual Income&quot;</span><span class="hl std">,</span> <span class="hl kwc">y</span> <span class="hl std">=</span><span class="hl str">&quot;Loan Amount&quot;</span> <span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl com"># I will now add the trend line </span>
+  <span class="hl kwd">geom_smooth</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl kwd">ylim</span><span class="hl std">(</span><span class="hl num">0</span><span class="hl std">,</span><span class="hl num">35000</span><span class="hl std">)</span> <span class="hl com"># added this limit because max loan_amnt is 35k &amp; makes plot look clean</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = &quot;cs&quot;)'
+</pre></div>
+<div class="warning"><pre class="knitr r">## Warning: Removed 4 rows containing non-finite values (stat_smooth).
+</pre></div>
+<div class="warning"><pre class="knitr r">## Warning: Removed 4 rows containing missing values (geom_point).
+</pre></div>
+<div class="warning"><pre class="knitr r">## Warning: Removed 51 rows containing missing values (geom_smooth).
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" class="plot" /></div></div>
+<br>
+
+<p>Problem 4<br>
+Next, I will generate the barplot of term and grade on the same barplot using ggplot2</p>
+<div class="chunk" id="unnamed-chunk-4"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span> <span class="hl std">= loan,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=term,</span> <span class="hl kwc">y</span><span class="hl std">= ..count..))</span> <span class="hl opt">+</span>
+  <span class="hl com"># This will add the bar plot layer  and group data points by term</span>
+  <span class="hl kwd">geom_bar</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">fill</span> <span class="hl std">= grade),</span> <span class="hl kwc">position</span> <span class="hl std">=</span> <span class="hl str">&quot;dodge&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl com"># I want to add labels to the plot </span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Bar Plot of Term and Grade&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span> <span class="hl std">=</span><span class="hl str">&quot;Term&quot;</span><span class="hl std">,</span> <span class="hl kwc">y</span> <span class="hl std">=</span><span class="hl str">&quot;Count&quot;</span> <span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div></div>
+<br>
+
+<p>Problem 5<br>
+In this problem,  I will now generate the dotplot of loan_amnt against grade using ggplot2</p>
+<div class="chunk" id="unnamed-chunk-5"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#covert into factor</span>
+<span class="hl std">loan</span><span class="hl opt">$</span><span class="hl std">grade</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">as.factor</span><span class="hl std">(loan</span><span class="hl opt">$</span><span class="hl std">grade)</span>
+</pre></div>
+</div></div>
+<div class="chunk" id="unnamed-chunk-6"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#plot dotplot using ggplot2</span>
+<span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span> <span class="hl std">= loan,</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= grade,</span> <span class="hl kwc">y</span> <span class="hl std">= loan_amnt))</span> <span class="hl opt">+</span>
+  <span class="hl kwd">geom_dotplot</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">colour</span> <span class="hl std">= grade,</span> <span class="hl kwc">fill</span> <span class="hl std">= grade),</span> <span class="hl com"># here i made both the outline and dot the same color because there is too much data and it turns the whole plot black</span>
+               <span class="hl kwc">binwidth</span><span class="hl std">=</span> <span class="hl num">2</span><span class="hl std">,</span>
+               <span class="hl kwc">binaxis</span> <span class="hl std">=</span> <span class="hl str">&quot;y&quot;</span><span class="hl std">,</span>
+               <span class="hl kwc">stackdir</span> <span class="hl std">=</span> <span class="hl str">&quot;center&quot;</span>
+               <span class="hl std">)</span><span class="hl opt">+</span>
+  <span class="hl com"># add labels to the plot </span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Dot Plot of Grade and Loan Amount&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span> <span class="hl std">=</span><span class="hl str">&quot;Grade&quot;</span><span class="hl std">,</span> <span class="hl kwc">y</span> <span class="hl std">=</span><span class="hl str">&quot;Loan Amount&quot;</span>
+       <span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div></div>
+<br>
+
+<p>Problem 6<br>
+Lastly, I will create the boxplot of loan_amnt against term using ggplot2 </p>
+<div class="chunk" id="unnamed-chunk-7"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">boxplot</span><span class="hl std">(loan_amnt</span> <span class="hl opt">~</span> <span class="hl std">term,</span> <span class="hl kwc">data</span><span class="hl std">=loan,</span> <span class="hl kwc">notch</span><span class="hl std">=</span><span class="hl num">TRUE</span><span class="hl std">,</span>
+        <span class="hl kwc">col</span> <span class="hl std">=</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;pink&quot;</span><span class="hl std">),</span>
+        <span class="hl kwc">main</span> <span class="hl std">=</span> <span class="hl str">&quot;Loan Amounts by Term&quot;</span><span class="hl std">,</span>
+        <span class="hl kwc">xlab</span> <span class="hl std">=</span> <span class="hl str">&quot;Term&quot;</span><span class="hl std">,</span>
+        <span class="hl kwc">ylab</span> <span class="hl std">=</span> <span class="hl str">&quot;Loan Amounts&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl kwd">last_plot</span><span class="hl std">()</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-7-2.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># Now I will save the graph in a file, loanterm.jpg using ggplot2</span>
+<span class="hl kwd">ggsave</span><span class="hl std">(</span><span class="hl str">&quot;loanterm.jpg&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## Saving 7 x 6 in image
+</pre></div>
+</div></div>
+
+
+</body>
+</html>

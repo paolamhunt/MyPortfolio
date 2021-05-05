@@ -1,0 +1,199 @@
+<html>
+
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>K-Nearest Neighbors Algorithm</title>
+</head>
+
+<body>
+<h2>K-Nearest Neighbors Algorithm</h2><br>
+
+<p>PROBLEM 1<br>
+In this section, I will set the working directory and load the data set</p>
+
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#set working directory</span>
+<span class="hl kwd">setwd</span><span class="hl std">(</span><span class="hl str">&quot;~/Desktop/MU/DS/DSCI_302/Projects/Project 8&quot;</span><span class="hl std">)</span>
+
+<span class="hl com">#load data set</span>
+<span class="hl kwd">library</span><span class="hl std">(readxl)</span>
+<span class="hl std">breast_cancer_data</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read.csv</span><span class="hl std">(</span><span class="hl str">&quot;breast_cancer_data.csv&quot;</span><span class="hl std">)</span>
+
+<span class="hl com"># load classification</span>
+<span class="hl kwd">library</span><span class="hl std">(class)</span>
+
+<span class="hl com"># load ggplot2</span>
+<span class="hl kwd">library</span><span class="hl std">(ggplot2)</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 2<br>
+In this problem, I will create a user-defined function of two arguments to plot the box plot of predictor based on different category of the target.</p>
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># create function with two arguments </span>
+<span class="hl std">BoxplotPredictorOnTarget</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span> <span class="hl std">(</span><span class="hl kwc">target</span><span class="hl std">,</span> <span class="hl kwc">predictor</span><span class="hl std">){</span>
+  <span class="hl std">boxplotResult</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span> <span class="hl std">= breast_cancer_data,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">= target,</span> <span class="hl kwc">y</span><span class="hl std">=predictor))</span><span class="hl opt">+</span>
+    <span class="hl kwd">geom_boxplot</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">col</span><span class="hl std">= predictor))</span><span class="hl opt">+</span>
+    <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Box Plot of Predictor v Target&quot;</span><span class="hl std">,</span> <span class="hl kwc">x</span> <span class="hl std">=</span> <span class="hl str">&quot;Target&quot;</span><span class="hl std">,</span> <span class="hl kwc">y</span> <span class="hl std">=</span> <span class="hl str">&quot;Predictor&quot;</span> <span class="hl std">)</span>
+  <span class="hl kwd">return</span><span class="hl std">(boxplotResult)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># convert the variable diagnosis into factor (B = Beningn, M = Malignant)</span>
+<span class="hl std">breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">diagnosis</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">as.factor</span><span class="hl std">(breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">diagnosis )</span>
+
+<span class="hl com"># use the user defined function to generate the box plot of area_mean against Diagnosis</span>
+<span class="hl kwd">BoxplotPredictorOnTarget</span><span class="hl std">(breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">area_mean, breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">diagnosis)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># use the user defined function to generate the box plot of area_se against Diagnosis</span>
+<span class="hl kwd">BoxplotPredictorOnTarget</span><span class="hl std">(breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">area_se, breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">diagnosis)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-2-2.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com"># use the user defined function to generate the box plot of texture_mean against Diagnosis</span>
+<span class="hl kwd">BoxplotPredictorOnTarget</span><span class="hl std">(breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">texture_mean, breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">diagnosis)</span>
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-2-3.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div></div>
+<br>
+
+<p>PROBLEM 3<br>
+In this problem, I will build three different KNN models to forecast the Diagnosis and recommend the best model based on its accuracy.</p>
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># Normalize the data points</span>
+<span class="hl std">NormlizedData</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span> <span class="hl std">(</span><span class="hl kwc">variable</span><span class="hl std">){</span>
+  <span class="hl std">NormalizedResult</span> <span class="hl kwb">&lt;-</span> <span class="hl std">(variable</span> <span class="hl opt">-</span> <span class="hl kwd">min</span><span class="hl std">(variable))</span><span class="hl opt">/</span><span class="hl std">(</span><span class="hl kwd">max</span><span class="hl std">(variable)</span> <span class="hl opt">-</span> <span class="hl kwd">min</span><span class="hl std">(variable))</span>
+  <span class="hl kwd">return</span><span class="hl std">(NormalizedResult)</span>
+<span class="hl std">}</span>
+
+<span class="hl com">#normalize area_mean</span>
+<span class="hl std">breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">area_mean</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">area_mean)</span>
+<span class="hl com">#normalize area_se</span>
+<span class="hl std">breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">area_se</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">area_se)</span>
+<span class="hl com">#normalize texture_mean</span>
+<span class="hl std">breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">texture_mean</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">texture_mean)</span>
+
+<span class="hl com"># define KNN function to avoid repeating code</span>
+<span class="hl std">KNN_Function</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">df</span><span class="hl std">,</span> <span class="hl kwc">predictors</span><span class="hl std">,</span> <span class="hl kwc">data.target</span><span class="hl std">){</span>
+  <span class="hl std">data.predictors</span> <span class="hl kwb">&lt;-</span> <span class="hl std">df[predictors]</span> <span class="hl com">#assigning predictors</span>
+  <span class="hl std">train</span> <span class="hl kwb">&lt;-</span> <span class="hl std">data.predictors[</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">sample.size, ]</span> <span class="hl com">#training data</span>
+  <span class="hl std">test</span> <span class="hl kwb">&lt;-</span> <span class="hl std">data.predictors[</span><span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">sample.size), ]</span> <span class="hl com">#test data</span>
+
+  <span class="hl std">cl</span> <span class="hl kwb">&lt;-</span> <span class="hl std">data.target[</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">sample.size]</span> <span class="hl com">#corresponding label selection</span>
+  <span class="hl std">num.neighbors</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">floor</span><span class="hl std">(</span><span class="hl kwd">sqrt</span><span class="hl std">(</span><span class="hl kwd">nrow</span><span class="hl std">(breast_cancer_data)))</span>
+
+  <span class="hl std">knn.test.predict</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">knn</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(train),</span> <span class="hl com">#KNN algorithm</span>
+                          <span class="hl kwd">data.frame</span><span class="hl std">(test),</span>
+                          <span class="hl std">cl,</span>
+                          <span class="hl kwc">k</span><span class="hl std">=num.neighbors</span>
+  <span class="hl std">)</span>
+
+  <span class="hl std">test.label</span> <span class="hl kwb">&lt;-</span> <span class="hl std">data.target[</span><span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">sample.size)]</span> <span class="hl com">#assigning target</span>
+  <span class="hl std">cm</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">table</span><span class="hl std">(test.label, knn.test.predict)</span> <span class="hl com">#confusion matrix</span>
+
+  <span class="hl std">accuracy</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">sum</span><span class="hl std">(</span><span class="hl kwd">diag</span><span class="hl std">(cm))</span><span class="hl opt">/</span><span class="hl kwd">sum</span><span class="hl std">(cm)</span><span class="hl opt">*</span><span class="hl num">100</span> <span class="hl com">#KNN accuracy calculation</span>
+
+  <span class="hl kwd">return</span><span class="hl std">(accuracy)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># a. Split the data into training data set (80%) and test data set (20%) </span>
+
+<span class="hl com"># Split the data</span>
+<span class="hl std">sample.size</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">floor</span><span class="hl std">(</span><span class="hl num">0.8</span><span class="hl opt">*</span><span class="hl kwd">nrow</span><span class="hl std">(breast_cancer_data))</span>
+
+<span class="hl com"># b. Forecast Diagnosis using one predictor ----</span>
+
+<span class="hl kwd">KNN_Function</span><span class="hl std">(breast_cancer_data,</span> <span class="hl com">#KNN prediction</span>
+         <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;area_mean&quot;</span><span class="hl std">),</span>
+         <span class="hl std">breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">diagnosis</span>
+<span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 93.85965
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 93.85965</span>
+
+<span class="hl com"># c. Forecast Diagnosis using two predictors ----</span>
+
+<span class="hl kwd">KNN_Function</span><span class="hl std">(breast_cancer_data,</span> <span class="hl com">#KNN prediction</span>
+             <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;area_mean&quot;</span><span class="hl std">,</span><span class="hl str">&quot;area_se&quot;</span><span class="hl std">),</span>
+             <span class="hl std">breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">diagnosis</span>
+<span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 93.85965
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 93.85965</span>
+
+
+<span class="hl com"># d. Forecast Diagnosis using three predictors ----</span>
+
+<span class="hl kwd">KNN_Function</span><span class="hl std">(breast_cancer_data,</span> <span class="hl com">#KNN prediction</span>
+             <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;area_mean&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;area_se&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;texture_mean&quot;</span><span class="hl std">),</span>
+             <span class="hl std">breast_cancer_data</span><span class="hl opt">$</span><span class="hl std">diagnosis</span>
+<span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 83.33333
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 83.33333</span>
+</pre></div>
+</div></div>
+<br>
+
+</body>
+</html>

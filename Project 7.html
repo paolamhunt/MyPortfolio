@@ -1,0 +1,227 @@
+<html>
+
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>Multiple Linear Regression</title>
+</head>
+
+<body>
+
+<p>Problem 1<br>
+In this section, I will set the working directory and load the data set</p>
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#set working directory</span>
+<span class="hl kwd">setwd</span><span class="hl std">(</span><span class="hl str">&quot;~/Desktop/MU/DS/DSCI_302/Projects/Project 7&quot;</span><span class="hl std">)</span>
+
+<span class="hl com">#load data set</span>
+<span class="hl kwd">library</span><span class="hl std">(readxl)</span>
+<span class="hl std">kc_house_data</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read.csv</span><span class="hl std">(</span><span class="hl str">&quot;kc_house_data.csv&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>Problem 2<br>
+# In this problem, I will build a linear model to forecast the price using bedrooms, bathrooms and sqft_living.</p>
+
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># first, I will build the linear model using bathrooms, bedrooms, and sqft_living as features</span>
+<span class="hl std">price.lm</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(price</span> <span class="hl opt">~</span> <span class="hl std">bathrooms</span> <span class="hl opt">+</span> <span class="hl std">bedrooms</span> <span class="hl opt">+</span> <span class="hl std">sqft_living,</span> <span class="hl kwc">data</span><span class="hl std">= kc_house_data)</span>
+
+<span class="hl com"># next, I will look at the coefficients for this model to write the mathematical formula</span>
+<span class="hl kwd">coef</span><span class="hl std">(price.lm)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## (Intercept)   bathrooms    bedrooms sqft_living 
+##  74662.0988   7928.7080 -57906.6307    309.6048
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## (Intercept)   bathrooms    bedrooms       sqft_living </span>
+<span class="hl com">## 74662.0988    7928.7080    -57906.6307    309.6048 </span>
+
+<span class="hl com">## Math Formula</span>
+<span class="hl com">## price = 74662.0988 + 7928.7080*bathrooms + -57906.6307*bedrooms + 309.6048*sqft_living</span>
+
+<span class="hl com"># lastly, I will take a look at the R-squared and adjusted R-Squared values to determine model suitability</span>
+<span class="hl kwd">summary</span><span class="hl std">(price.lm)</span><span class="hl opt">$</span><span class="hl std">r.squared</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.5069364
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.5069364</span>
+
+<span class="hl kwd">summary</span><span class="hl std">(price.lm)</span><span class="hl opt">$</span><span class="hl std">adj.r.squared</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.5068679
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.5068679</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>Problem 3<br>
+# In this problem, I will build a linear model to forecast the price using bedrooms, bathrooms and sqft_living and all the cross effects between them.</p>
+
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># build the model</span>
+<span class="hl std">price.lm2</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(price</span> <span class="hl opt">~</span> <span class="hl std">bedrooms</span> <span class="hl opt">*</span> <span class="hl std">bathrooms</span> <span class="hl opt">*</span> <span class="hl std">sqft_living,</span> <span class="hl kwc">data</span><span class="hl std">= kc_house_data)</span>
+
+<span class="hl com"># next, I will look at the coefficients for this model to write the mathematical formula</span>
+<span class="hl kwd">coef</span><span class="hl std">(price.lm2)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##                    (Intercept)                       bedrooms 
+##                   433859.56819                   -46698.90493 
+##                      bathrooms                    sqft_living 
+##                  -120340.09037                      -24.90185 
+##             bedrooms:bathrooms           bedrooms:sqft_living 
+##                    -4824.74735                       32.27340 
+##          bathrooms:sqft_living bedrooms:bathrooms:sqft_living 
+##                      112.10829                      -10.14940
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## Math Formula                    </span>
+<span class="hl com">## price = 433859.56819 + -46698.90493*bedrooms + -120340.09037*bathrooms + -24.90185*sqft_living          </span>
+<span class="hl com">##              + -4824.74735*bedrooms:bathrooms + 32.27340*bedrooms:sqft_living + 112.10829*bathrooms:sqft_living</span>
+<span class="hl com">##              + -10.14940*bedrooms:bathrooms:sqft_living </span>
+
+<span class="hl com"># lastly, I will take a look at the adjusted R-Square to compare it to the previous model and determine its suitability</span>
+<span class="hl kwd">summary</span><span class="hl std">(price.lm2)</span><span class="hl opt">$</span><span class="hl std">adj.r.squared</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.5434959
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.5434959</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>Problem 4 <br>
+In this problem, I will build a linear model to forecast the price using bedrooms, bathrooms and sqft_living, waterfront and grade.</p>
+
+<div class="chunk" id="unnamed-chunk-4"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># first, I will turn the variable waterfront into a factor</span>
+<span class="hl std">kc_house_data</span><span class="hl opt">$</span><span class="hl std">waterfront</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">as.factor</span><span class="hl std">(kc_house_data</span><span class="hl opt">$</span><span class="hl std">waterfront)</span>
+
+<span class="hl com"># then, I will create the linear model</span>
+<span class="hl std">price.lm3</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(price</span> <span class="hl opt">~</span> <span class="hl std">bathrooms</span> <span class="hl opt">+</span> <span class="hl std">bedrooms</span> <span class="hl opt">+</span> <span class="hl std">sqft_living</span> <span class="hl opt">+</span> <span class="hl std">waterfront</span> <span class="hl opt">+</span> <span class="hl std">grade,</span> <span class="hl kwc">data</span><span class="hl std">= kc_house_data)</span>
+
+<span class="hl com"># here I will print the coefficients to build the mathematical formula</span>
+<span class="hl kwd">coef</span><span class="hl std">(price.lm3)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##  (Intercept)    bathrooms     bedrooms  sqft_living  waterfront1        grade 
+## -488328.0103  -25540.1768  -31983.7625     213.4464  799119.4286   96692.1751
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##    (Intercept)    bathrooms     bedrooms  sqft_living  waterfront1       grade</span>
+<span class="hl com">##   -488328.0103  -25540.1768  -31983.7625     213.4464  799119.4286   96692.1751 </span>
+
+<span class="hl com"># lastly, I want to see the adjusted r squared to compare this model to the previous model</span>
+<span class="hl kwd">summary</span><span class="hl std">(price.lm3)</span><span class="hl opt">$</span><span class="hl std">adj.r.squared</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.578082
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##  0.578082</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>Problem 5<br>
+In this problem, I will build a model with all the variables except id, date, zipcode, lat, and long without a y-intercept</p>
+
+<div class="chunk" id="unnamed-chunk-5"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">price.lm4</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(price</span> <span class="hl opt">~ -</span><span class="hl num">1</span> <span class="hl opt">+</span> <span class="hl std">.</span> <span class="hl opt">-</span> <span class="hl std">id</span> <span class="hl opt">-</span> <span class="hl std">date</span> <span class="hl opt">-</span> <span class="hl std">zipcode</span> <span class="hl opt">-</span> <span class="hl std">lat</span> <span class="hl opt">-</span> <span class="hl std">long,</span> <span class="hl kwc">data</span> <span class="hl std">= kc_house_data)</span>
+
+<span class="hl com"># show adjisted r-quared to compare previous model</span>
+<span class="hl kwd">summary</span><span class="hl std">(price.lm4)</span><span class="hl opt">$</span><span class="hl std">adj.r.squared</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.8904393
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.8904393</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>Problem 6<br>
+In this problem, I will predict the price based on new data</p>
+<div class="chunk" id="unnamed-chunk-6"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># First,  I will build the data frame with information of new house to estimate price</span>
+<span class="hl std">new.house</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">data.frame</span><span class="hl std">(</span><span class="hl kwc">bedrooms</span> <span class="hl std">=</span> <span class="hl num">4</span><span class="hl std">,</span> <span class="hl kwc">bathrooms</span> <span class="hl std">=</span> <span class="hl num">2</span><span class="hl std">,</span> <span class="hl kwc">sqft_living</span> <span class="hl std">=</span> <span class="hl num">2560</span><span class="hl std">,</span>
+                        <span class="hl kwc">sqft_lot</span> <span class="hl std">=</span> <span class="hl num">7650</span><span class="hl std">,</span> <span class="hl kwc">floors</span> <span class="hl std">=</span> <span class="hl num">1.5</span><span class="hl std">,</span>  <span class="hl kwc">waterfront</span> <span class="hl std">=</span> <span class="hl num">1</span><span class="hl std">,</span>
+                        <span class="hl kwc">view</span> <span class="hl std">=</span> <span class="hl num">3</span><span class="hl std">,</span> <span class="hl kwc">condition</span> <span class="hl std">=</span> <span class="hl num">5</span><span class="hl std">,</span> <span class="hl kwc">grade</span> <span class="hl std">=</span> <span class="hl num">10</span><span class="hl std">)</span>
+
+<span class="hl com"># convert the variables waterfront into a factor because the lm model is based on this variables as a factor</span>
+<span class="hl std">new.house</span><span class="hl opt">$</span><span class="hl std">waterfront</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">as.factor</span><span class="hl std">(new.house</span><span class="hl opt">$</span><span class="hl std">waterfront)</span>
+
+<span class="hl com"># build the model</span>
+<span class="hl std">price.lm5</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(price</span> <span class="hl opt">~</span> <span class="hl std">bathrooms</span> <span class="hl opt">+</span> <span class="hl std">bedrooms</span> <span class="hl opt">+</span> <span class="hl std">sqft_living</span> <span class="hl opt">+</span> <span class="hl std">sqft_lot</span> <span class="hl opt">+</span> <span class="hl std">floors</span> <span class="hl opt">+</span> <span class="hl std">waterfront</span> <span class="hl opt">+</span> <span class="hl std">view</span> <span class="hl opt">+</span> <span class="hl std">condition</span> <span class="hl opt">+</span> <span class="hl std">grade,</span> <span class="hl kwc">data</span> <span class="hl std">= kc_house_data)</span>
+
+<span class="hl com"># predict average sales price of new house</span>
+<span class="hl kwd">predict</span><span class="hl std">(price.lm5,</span> <span class="hl kwc">newdata</span> <span class="hl std">= new.house)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##       1 
+## 1689762
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 1689762</span>
+
+<span class="hl com"># predict the 95% predicted interval for this house</span>
+<span class="hl kwd">predict</span><span class="hl std">(price.lm5,</span> <span class="hl kwc">newdata</span> <span class="hl std">= new.house,</span> <span class="hl kwc">interval</span> <span class="hl std">=</span> <span class="hl str">&quot;predict&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##       fit     lwr     upr
+## 1 1689762 1235440 2144084
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##     fit     lwr     upr</span>
+<span class="hl com">## 1689762 1235440 2144084</span>
+</pre></div>
+</div></div>
+
+
+</body>
+</html>
