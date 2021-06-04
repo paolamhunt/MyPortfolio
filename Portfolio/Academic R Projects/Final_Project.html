@@ -1,0 +1,504 @@
+<html>
+
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>Final Project</title>
+</head>
+
+<body>
+
+<h2> Final Project</h2>
+
+<p>PROBLEM 1<br>
+In this section, I will set the working direcory and loat the data set</p>
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#set working directory</span>
+<span class="hl kwd">setwd</span><span class="hl std">(</span><span class="hl str">&quot;~/Desktop/MU/DS/DSCI_302/Projects/Final Project&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="error"><pre class="knitr r">## Error in setwd(&quot;~/Desktop/MU/DS/DSCI_302/Projects/Final Project&quot;): cannot change working directory
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">#load data set</span>
+<span class="hl kwd">library</span><span class="hl std">(readxl)</span>
+<span class="hl std">pmsm_temp</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read.csv</span><span class="hl std">(</span><span class="hl str">&quot;pmsm_temperature_data.csv&quot;</span><span class="hl std">)</span>
+
+<span class="hl com"># load packages </span>
+<span class="hl kwd">library</span><span class="hl std">(tidyr)</span>
+<span class="hl kwd">library</span><span class="hl std">(ggplot2)</span>
+<span class="hl kwd">library</span><span class="hl std">(class)</span>
+
+<span class="hl com"># drop all na values from data set</span>
+<span class="hl std">pmsm_temp</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">drop_na</span><span class="hl std">(pmsm_temp)</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 2<br>
+In this problem, I will list the categorical variable from this list and convert it to a factor</p>
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># look at dataframe structure to determine categorical value</span>
+<span class="hl kwd">str</span><span class="hl std">(pmsm_temp)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 'data.frame':	750721 obs. of  11 variables:
+##  $ ambient       : num  -0.752 -0.771 -0.783 -0.781 -0.774 ...
+##  $ coolant       : num  -1.12 -1.12 -1.12 -1.12 -1.12 ...
+##  $ u_d           : num  0.328 0.33 0.333 0.334 0.335 ...
+##  $ u_q           : num  -1.3 -1.3 -1.3 -1.3 -1.3 ...
+##  $ motor_speed   : num  -1.22 -1.22 -1.22 -1.22 -1.22 ...
+##  $ torque        : num  -0.25 -0.249 -0.249 -0.249 -0.249 ...
+##  $ i_d           : num  1.03 1.03 1.03 1.03 1.03 ...
+##  $ i_q           : num  -0.246 -0.246 -0.246 -0.247 -0.247 ...
+##  $ pm            : num  -2.52 -2.52 -2.52 -2.52 -2.52 ...
+##  $ stator_yoke   : chr  &quot;Negative&quot; &quot;Negative&quot; &quot;Negative&quot; &quot;Negative&quot; ...
+##  $ stator_winding: num  -2.02 -2.02 -2.02 -2.02 -2.02 ...
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># list unique data </span>
+<span class="hl kwd">unique</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] &quot;Negative&quot; &quot;Positive&quot;
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##  &quot;Negative&quot; &quot;Positive&quot; &quot;&quot; </span>
+
+<span class="hl com">#convert to factor</span>
+<span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">as.factor</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke)</span>
+
+<span class="hl com">#check that it is a factor</span>
+<span class="hl kwd">is.factor</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] TRUE
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 3<br>
+In this problem I will calculate the minimum, maximum, mean, median, standard deviation and three quartiles (25th, 50th and 75th percentiles) of the variable pm</p>
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># make sure the variable is numeric</span>
+<span class="hl kwd">is.numeric</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] TRUE
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## TRUE</span>
+
+<span class="hl com"># Calculate the minimum of the variable pm</span>
+<span class="hl kwd">min</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] -2.631991
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##  -2.631991</span>
+
+<span class="hl com"># Calculate the maximum of the variable pm</span>
+<span class="hl kwd">max</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 2.917456
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##  2.917456</span>
+
+<span class="hl com"># Calculate the mean of the variable pm</span>
+<span class="hl kwd">mean</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] -0.03654097
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##  -0.03654097</span>
+
+<span class="hl com"># Calculate median of the variable pm</span>
+<span class="hl kwd">median</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.04714583
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##  0.04714583</span>
+
+<span class="hl com"># Calculate standard deviation of the variable pm</span>
+<span class="hl kwd">sd</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 1.053009
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 1.053009</span>
+
+<span class="hl com"># Calculate three quartiles (25th, 50th and 75th percentiles) of the variable pm</span>
+<span class="hl kwd">quantile</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm,</span> <span class="hl kwc">probs</span> <span class="hl std">=</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">0.25</span><span class="hl std">,</span> <span class="hl num">0.5</span><span class="hl std">,</span> <span class="hl num">0.75</span><span class="hl std">))</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##         25%         50%         75% 
+## -0.77350146  0.04714583  0.70069534
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##         25%         50%         75% </span>
+<span class="hl com">## -0.77350146  0.04714583  0.70069534 </span>
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 4<br>
+In this problemm I will calculate the minimum, maximum, mean, median, standard deviation and three quartiles (25th, 50th and 75th percentiles) of the variable motor_speed</p>
+<div class="chunk" id="unnamed-chunk-4"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># make sure the variable is numeric</span>
+<span class="hl kwd">is.numeric</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] TRUE
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># Calculate the minimum of the variable motor_speed</span>
+<span class="hl kwd">min</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] -1.371529
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## -1.371529</span>
+
+<span class="hl com"># Calculate the maximum of the variable motor_speed</span>
+<span class="hl kwd">max</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 2.024164
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 2.024164</span>
+
+<span class="hl com"># Calculate the mean of the variable motor_speed</span>
+<span class="hl kwd">mean</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.07494906
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.07494906</span>
+
+<span class="hl com"># Calculate median of the variable motor_speed</span>
+<span class="hl kwd">median</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] -0.04054734
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## -0.04054734</span>
+
+<span class="hl com"># Calculate standard deviation of the variable motor_speed</span>
+<span class="hl kwd">sd</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.9804036
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.9804036</span>
+
+<span class="hl com"># Calculate three quartiles (25th, 50th and 75th percentiles) of the variable motor_speed</span>
+<span class="hl kwd">quantile</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed,</span> <span class="hl kwc">probs</span> <span class="hl std">=</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">0.25</span><span class="hl std">,</span> <span class="hl num">0.5</span><span class="hl std">,</span> <span class="hl num">0.75</span><span class="hl std">))</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##         25%         50%         75% 
+## -0.80668100 -0.04054734  0.93933344
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##         25%         50%         75% </span>
+<span class="hl com">## -0.80668100 -0.04054734  0.93933344 </span>
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 5<br>
+In this problem, I will calculate the correlation coefficient of the variables motor_speed and pm</p>
+<div class="chunk" id="unnamed-chunk-5"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># calculate correlation coefficient</span>
+<span class="hl kwd">cor</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed, pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.4147886
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># 0.4147886</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 6<br>
+In this problem, I will create the frequency table of stator_yoke and find its mode</p>
+<div class="chunk" id="unnamed-chunk-6"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># calculate frequency table</span>
+<span class="hl kwd">table</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## Negative Positive 
+##   429137   321584
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##  Negative Positive </span>
+<span class="hl com">##    429137   321584 </span>
+
+<span class="hl com"># find the mode of stator_yoke</span>
+<span class="hl kwd">names</span><span class="hl std">(</span><span class="hl kwd">sort</span><span class="hl std">(</span><span class="hl opt">-</span><span class="hl kwd">table</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke)))[</span><span class="hl num">1</span><span class="hl std">]</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] &quot;Negative&quot;
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## &quot;Negative&quot;</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 7<br>
+In this problem, I will plot the histogram and density of the variable "pm" and I will add a vertical line denoting the mean using ggplot2</p>
+<div class="chunk" id="unnamed-chunk-7"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span> <span class="hl std">= pmsm_temp,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span><span class="hl std">=pm))</span><span class="hl opt">+</span>
+  <span class="hl com"># this code will add the histogram layer</span>
+  <span class="hl kwd">geom_histogram</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">y</span><span class="hl std">=..density..),</span> <span class="hl kwc">bins</span><span class="hl std">=</span><span class="hl num">45</span><span class="hl std">,</span> <span class="hl kwc">colour</span><span class="hl std">=</span><span class="hl str">&quot;black&quot;</span><span class="hl std">,</span> <span class="hl kwc">fill</span><span class="hl std">=</span><span class="hl str">&quot;pink&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl com"># here the density graph is added</span>
+  <span class="hl kwd">geom_density</span><span class="hl std">(</span><span class="hl kwc">alpha</span><span class="hl std">=</span><span class="hl num">.2</span><span class="hl std">,</span> <span class="hl kwc">fill</span><span class="hl std">=</span><span class="hl str">&quot;blue&quot;</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl com"># I will now add a vertical line denoting the mean </span>
+  <span class="hl kwd">geom_vline</span><span class="hl std">(</span><span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">xintercept</span><span class="hl std">=</span><span class="hl kwd">mean</span><span class="hl std">(pm)),</span>
+             <span class="hl kwc">color</span><span class="hl std">=</span><span class="hl str">&quot;red&quot;</span><span class="hl std">,</span> <span class="hl kwc">linetype</span><span class="hl std">=</span><span class="hl str">&quot;solid&quot;</span><span class="hl std">,</span> <span class="hl kwc">size</span><span class="hl std">=</span> <span class="hl num">0.5</span><span class="hl std">)</span> <span class="hl opt">+</span>
+  <span class="hl com"># I want to add labels to the plot </span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Histogram and Density Plot of Permanent Magnet Surface Temperature&quot;</span><span class="hl std">,</span>
+       <span class="hl kwc">x</span> <span class="hl std">=</span><span class="hl str">&quot;Permanent Magnet Surface Temperature&quot;</span><span class="hl std">,</span>
+       <span class="hl kwc">y</span> <span class="hl std">=</span><span class="hl str">&quot;Density&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="final_project_figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div></div>
+<br>
+
+<p>PROBLEM 8<br>
+In this problem, I will plot the scatter plot of pm against motor_speed and I will also add the trend line using ggplot2</p>
+<div class="chunk" id="unnamed-chunk-8"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">ggplot</span><span class="hl std">(</span><span class="hl kwc">data</span> <span class="hl std">= pmsm_temp,</span> <span class="hl kwd">aes</span><span class="hl std">(</span><span class="hl kwc">x</span> <span class="hl std">= motor_speed,</span> <span class="hl kwc">y</span> <span class="hl std">= pm))</span><span class="hl opt">+</span>
+  <span class="hl kwd">geom_point</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl com"># add trend line</span>
+  <span class="hl kwd">geom_smooth</span><span class="hl std">()</span> <span class="hl opt">+</span>
+  <span class="hl com"># add labels to the plot </span>
+  <span class="hl kwd">labs</span><span class="hl std">(</span><span class="hl kwc">title</span> <span class="hl std">=</span> <span class="hl str">&quot;Scatter Plot of Motor Speed v Permanent Magnet Surface Temperature&quot;</span><span class="hl std">,</span>
+       <span class="hl kwc">x</span> <span class="hl std">=</span><span class="hl str">&quot;Motor Speed&quot;</span><span class="hl std">,</span>
+       <span class="hl kwc">y</span> <span class="hl std">=</span><span class="hl str">&quot;Permanent Magnet Surface Temperature&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = &quot;cs&quot;)'
+</pre></div>
+</div><div class="rimage default"><img src="final_project_figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" class="plot" /></div></div>
+<br>
+
+<p>PROBLEM 9<br>
+In this problem, I will boxplot pm against stator_yoke and then I will save the graph in a file using ggplot</p>
+<div class="chunk" id="unnamed-chunk-9"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#plot the boxplot</span>
+<span class="hl kwd">boxplot</span><span class="hl std">(pm</span> <span class="hl opt">~</span> <span class="hl std">stator_yoke,</span> <span class="hl kwc">data</span><span class="hl std">=pmsm_temp,</span>
+        <span class="hl kwc">col</span> <span class="hl std">=</span> <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;yellow&quot;</span><span class="hl std">),</span>
+        <span class="hl kwc">main</span> <span class="hl std">=</span> <span class="hl str">&quot;PM by Stator Yoke&quot;</span><span class="hl std">,</span>
+        <span class="hl kwc">xlab</span> <span class="hl std">=</span> <span class="hl str">&quot;Stator Yoke&quot;</span><span class="hl std">,</span>
+        <span class="hl kwc">ylab</span> <span class="hl std">=</span> <span class="hl str">&quot;PM&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div><div class="rimage default"><img src="final_project_figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" class="plot" /></div><div class="rcode">
+<div class="source"><pre class="knitr r"><span class="hl com">#save the file</span>
+<span class="hl kwd">ggsave</span><span class="hl std">(</span><span class="hl str">&quot;pmyoke.jpg&quot;</span><span class="hl std">,</span><span class="hl kwc">plot</span><span class="hl std">=</span> <span class="hl kwd">last_plot</span><span class="hl std">(),</span> <span class="hl kwc">width</span> <span class="hl std">=</span> <span class="hl num">20</span><span class="hl std">,</span> <span class="hl kwc">height</span> <span class="hl std">=</span> <span class="hl num">15</span><span class="hl std">,</span> <span class="hl kwc">units</span> <span class="hl std">=</span> <span class="hl str">&quot;cm&quot;</span><span class="hl std">)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = &quot;cs&quot;)'
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 10<br>
+In this problem, I will create several multiple linear models and compare them against each other.</p>
+<div class="chunk" id="unnamed-chunk-10"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># Part A ---- </span>
+<span class="hl com"># In this section I will preform multiple linear regression with pm as the response and the predictors are: Ambien, Coolant, motor_speed, and Torque.  </span>
+<span class="hl com"># I will use this to write down the math formula with numerical coefficients. </span>
+
+<span class="hl com"># build linear model</span>
+<span class="hl std">lm1</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(pm</span> <span class="hl opt">~</span> <span class="hl std">ambient</span> <span class="hl opt">+</span> <span class="hl std">coolant</span> <span class="hl opt">+</span> <span class="hl std">motor_speed</span> <span class="hl opt">+</span> <span class="hl std">torque,</span> <span class="hl kwc">data</span><span class="hl std">= pmsm_temp)</span>
+
+<span class="hl com"># get coefficients for math formula</span>
+<span class="hl kwd">coef</span><span class="hl std">(lm1)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##  (Intercept)      ambient      coolant  motor_speed       torque 
+## -0.003930971  0.345750361  0.301152316  0.399119596  0.083694444
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##  (Intercept)      ambient      coolant  motor_speed       torque </span>
+<span class="hl com">## -0.003930971  0.345750361  0.301152316  0.399119596  0.083694444 </span>
+
+<span class="hl com">## math formula</span>
+<span class="hl com">## pm = -0.003930971 +  0.345750361*ambient +  0.301152316*coolant +  0.399119596*motor_speed </span>
+<span class="hl com">##                   +  0.083694444*torque</span>
+
+<span class="hl com"># Part B ----</span>
+<span class="hl com"># In this section, I will perform a multiple linear regression with pm as the response and the predictors are: Ambien, Coolant, u_d,  motor_speed, Torque, and stator_winding.</span>
+<span class="hl com"># I will use this to write down the math formula with numerical coefficients. </span>
+
+<span class="hl com">#build linear model</span>
+ <span class="hl std">lm2</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(pm</span> <span class="hl opt">~</span> <span class="hl std">ambient</span> <span class="hl opt">+</span> <span class="hl std">coolant</span> <span class="hl opt">+</span> <span class="hl std">u_d</span> <span class="hl opt">+</span> <span class="hl std">motor_speed</span> <span class="hl opt">+</span> <span class="hl std">torque</span> <span class="hl opt">+</span> <span class="hl std">stator_winding,</span> <span class="hl kwc">data</span> <span class="hl std">= pmsm_temp)</span>
+
+<span class="hl com"># get coefficients for math formula</span>
+<span class="hl kwd">coef</span><span class="hl std">(lm2)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##    (Intercept)        ambient        coolant            u_d    motor_speed 
+##   -0.006636084    0.280087056   -0.010662764   -0.270032724    0.054033292 
+##         torque stator_winding 
+##   -0.284207277    0.616822296
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##   (Intercept)        ambient        coolant            u_d    motor_speed </span>
+<span class="hl com">##  -0.006636084    0.280087056   -0.010662764   -0.270032724    0.054033292 </span>
+<span class="hl com">##        torque stator_winding </span>
+<span class="hl com">##  -0.284207277    0.616822296 </span>
+
+<span class="hl com"># math formula</span>
+<span class="hl com">## pm = -0.006636084 + 0.280087056*ambient + -0.010662764*coolant + -0.270032724*u_d </span>
+<span class="hl com">##                   + 0.054033292*motor_speed + -0.284207277*torque + 0.616822296*stator_winding</span>
+
+<span class="hl com"># Part C ----</span>
+<span class="hl com"># Preform multiple linear regression with pm as the response and the predictors are: </span>
+          <span class="hl com"># Ambien, Coolant, u_d, u_q, motor_speed, Torque, stator_yoke, and stator_winding. </span>
+<span class="hl com"># I will use this to write down the math formula with numerical coefficients. </span>
+
+<span class="hl com">#build linear model</span>
+<span class="hl std">lm3</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">lm</span><span class="hl std">(pm</span> <span class="hl opt">~</span> <span class="hl std">ambient</span> <span class="hl opt">+</span> <span class="hl std">coolant</span> <span class="hl opt">+</span> <span class="hl std">u_d</span> <span class="hl opt">+</span> <span class="hl std">motor_speed</span> <span class="hl opt">+</span> <span class="hl std">torque</span> <span class="hl opt">+</span> <span class="hl std">stator_yoke</span> <span class="hl opt">+</span> <span class="hl std">stator_winding,</span>
+          <span class="hl kwc">data</span> <span class="hl std">= pmsm_temp)</span>
+
+<span class="hl com"># get coefficients for math formula</span>
+<span class="hl kwd">coef</span><span class="hl std">(lm3)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">##         (Intercept)             ambient             coolant                 u_d 
+##         -0.11790229          0.28052318         -0.06544690         -0.27201636 
+##         motor_speed              torque stator_yokePositive      stator_winding 
+##          0.05958552         -0.27914726          0.23456329          0.56166527
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">##          (Intercept)             ambient             coolant </span>
+<span class="hl com">##         -0.11790229          0.28052318         -0.06544690 </span>
+<span class="hl com">##                 u_d         motor_speed              torque </span>
+<span class="hl com">##         -0.27201636          0.05958552         -0.27914726 </span>
+<span class="hl com">##  stator_yokePositive      stator_winding </span>
+<span class="hl com">#           0.23456329          0.56166527 </span>
+
+<span class="hl com"># Part D ----</span>
+<span class="hl com"># In this section, I will determine which multiple linear model is best based on the adjusted R Square</span>
+
+<span class="hl com"># adjusted r square for linear model 1</span>
+<span class="hl kwd">summary</span><span class="hl std">(lm1)</span><span class="hl opt">$</span><span class="hl std">adj.r.squared</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.4541997
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.4541997</span>
+
+<span class="hl com"># adjusted r square for linear model 2</span>
+<span class="hl kwd">summary</span><span class="hl std">(lm2)</span><span class="hl opt">$</span><span class="hl std">adj.r.squared</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.6738776
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.6738776</span>
+
+<span class="hl com"># adjusted r square for linear model 3</span>
+<span class="hl kwd">summary</span><span class="hl std">(lm3)</span><span class="hl opt">$</span><span class="hl std">adj.r.squared</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 0.6778631
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com">## 0.6778631</span>
+</pre></div>
+</div></div>
+<br>
+
+<p>PROBLEM 11<br>
+In this problem, I will build a series of KNN models and recommend one based on its accuracy.</p>
+<div class="chunk" id="unnamed-chunk-11"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># first, I will define a function to normalize all the variables</span>
+<span class="hl std">NormlizedData</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span> <span class="hl std">(</span><span class="hl kwc">variable</span><span class="hl std">){</span>
+  <span class="hl std">result</span> <span class="hl kwb">&lt;-</span> <span class="hl std">(variable</span> <span class="hl opt">-</span> <span class="hl kwd">min</span><span class="hl std">(variable))</span><span class="hl opt">/</span><span class="hl std">(</span><span class="hl kwd">max</span><span class="hl std">(variable)</span> <span class="hl opt">-</span> <span class="hl kwd">min</span><span class="hl std">(variable))</span>
+  <span class="hl kwd">return</span><span class="hl std">(result)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># normalize the data</span>
+<span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">pm)</span>
+<span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">ambient</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">ambient)</span>
+<span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">coolant</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">coolant)</span>
+<span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">u_d</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">u_d)</span>
+<span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">u_q</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">u_q)</span>
+<span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">motor_speed)</span>
+<span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">torque</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">NormlizedData</span><span class="hl std">(pmsm_temp</span><span class="hl opt">$</span><span class="hl std">torque)</span>
+
+<span class="hl com"># define KNN function to avoid repeating code</span>
+<span class="hl std">KNN_Function</span> <span class="hl kwb">&lt;-</span> <span class="hl kwa">function</span><span class="hl std">(</span><span class="hl kwc">df</span><span class="hl std">,</span> <span class="hl kwc">predictors</span><span class="hl std">,</span> <span class="hl kwc">data.target</span><span class="hl std">){</span>
+  <span class="hl std">data.predictors</span> <span class="hl kwb">&lt;-</span> <span class="hl std">df[predictors]</span> <span class="hl com"># assigning predictors</span>
+  <span class="hl std">train</span> <span class="hl kwb">&lt;-</span> <span class="hl std">data.predictors[</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">sample.size, ]</span> <span class="hl com"># training data</span>
+  <span class="hl std">test</span> <span class="hl kwb">&lt;-</span> <span class="hl std">data.predictors[</span><span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">sample.size), ]</span> <span class="hl com"># test data</span>
+
+  <span class="hl std">cl</span> <span class="hl kwb">&lt;-</span> <span class="hl std">data.target[</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">sample.size]</span> <span class="hl com"># corresponding label selection</span>
+  <span class="hl std">num.neighbors</span> <span class="hl kwb">&lt;-</span> <span class="hl num">200</span> <span class="hl com"># sqrt alone results in too many ties in knn</span>
+
+
+  <span class="hl std">knn.test.predict</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">knn</span><span class="hl std">(</span><span class="hl kwd">data.frame</span><span class="hl std">(train),</span> <span class="hl com"># KNN algorithm</span>
+                          <span class="hl kwd">data.frame</span><span class="hl std">(test),</span>
+                          <span class="hl std">cl,</span>
+                          <span class="hl kwc">k</span><span class="hl std">=num.neighbors</span>
+  <span class="hl std">)</span>
+
+  <span class="hl std">test.label</span> <span class="hl kwb">&lt;-</span> <span class="hl std">data.target[</span><span class="hl opt">-</span><span class="hl kwd">c</span><span class="hl std">(</span><span class="hl num">1</span><span class="hl opt">:</span><span class="hl std">sample.size)]</span> <span class="hl com"># assigning target</span>
+  <span class="hl std">cm</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">table</span><span class="hl std">(test.label, knn.test.predict)</span> <span class="hl com"># confusion matrix</span>
+
+  <span class="hl std">accuracy</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">sum</span><span class="hl std">(</span><span class="hl kwd">diag</span><span class="hl std">(cm))</span><span class="hl opt">/</span><span class="hl kwd">sum</span><span class="hl std">(cm)</span><span class="hl opt">*</span><span class="hl num">100</span> <span class="hl com"># KNN accuracy calculation</span>
+
+  <span class="hl kwd">return</span><span class="hl std">(accuracy)</span>
+<span class="hl std">}</span>
+
+<span class="hl com"># Part A ----</span>
+<span class="hl com"># In this section I will split the data into training dataset (85% of the original data) and test data set (15%) </span>
+<span class="hl std">sample.size</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">floor</span><span class="hl std">(</span><span class="hl num">0.85</span><span class="hl opt">*</span><span class="hl kwd">nrow</span><span class="hl std">(pmsm_temp))</span>
+
+<span class="hl com"># Part B ----</span>
+<span class="hl com"># In this section I will forecast stator_yoke using Pm, Ambient, and Coolant.</span>
+
+<span class="hl kwd">KNN_Function</span><span class="hl std">(pmsm_temp,</span>
+             <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;pm&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;ambient&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;coolant&quot;</span><span class="hl std">),</span>
+             <span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke</span>
+<span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 84.27035
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># Part C ----</span>
+<span class="hl com"># In this section, I will forecast the stator_yoke using Pm, Ambient, Coolant, and  motor_speed </span>
+
+<span class="hl com"># user defined KNN function</span>
+<span class="hl kwd">KNN_Function</span><span class="hl std">(pmsm_temp,</span>
+             <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;pm&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;ambient&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;coolant&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;motor_speed&quot;</span><span class="hl std">),</span>
+             <span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke</span>
+<span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 90.14555
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># Part D ----</span>
+<span class="hl com"># In this section I will, forecast the stator_yoke using Pm, Ambient, Coolant, u_d, u_q, motor_speed, and Torque </span>
+
+<span class="hl com"># user defined KNN function</span>
+<span class="hl kwd">KNN_Function</span><span class="hl std">(pmsm_temp,</span>
+             <span class="hl kwd">c</span><span class="hl std">(</span><span class="hl str">&quot;pm&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;ambient&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;coolant&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;u_d&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;u_q&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;motor_speed&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;torque&quot;</span><span class="hl std">),</span>
+             <span class="hl std">pmsm_temp</span><span class="hl opt">$</span><span class="hl std">stator_yoke</span>
+<span class="hl std">)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 91.3657
+</pre></div>
+</div></div>
+
+</body>
+</html>
